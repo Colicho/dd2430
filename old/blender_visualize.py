@@ -1,4 +1,4 @@
-from path_reader import read_file
+from old.path_reader import read_file
 paths = read_file('eu_city_2x2_macro_306.bin')
 
 import bpy

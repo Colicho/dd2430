@@ -1,5 +1,5 @@
 import numpy as np
-from path_reader import PropagationPath
+from old.path_reader import PropagationPath
 from sklearn.cluster import KMeans
 from sklearn.metrics import pairwise_distances_argmin_min
 
