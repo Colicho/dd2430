@@ -33,14 +33,9 @@ class PatchGenerator:
                 for l in range(5-c, 0, -1):
                     arr.append(0)
                 arr.append(path.path_gain_db)
-                min_val = min(arr)
-                max_val = max(arr)
-
-                # Normalize the list to the range -1 to 1
-                normalized_data = [2 * (x - min_val) / (max_val - min_val) - 1 for x in arr]
-
+   
                 # Update list
-                patches[i][j] = normalized_data
+                patches[i][j] = arr
                 
         return patches
 
