@@ -34,7 +34,6 @@ class PatchGenerator:
                     arr.append(0)
                 arr.append(path.path_gain_db)
    
-                # Update list
                 patches[i][j] = arr
                 
         return patches
