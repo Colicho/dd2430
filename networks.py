@@ -2,7 +2,7 @@ import torch.nn as nn
 
 class SiameseNetworkSimple(nn.Module):
     def __init__(self):
-        super(SiameseNetwork, self).__init__()
+        super(SiameseNetworkSimple, self).__init__()
         self.fc = nn.Sequential(
             nn.Linear(21, 128),
             nn.ReLU(),
@@ -17,7 +17,7 @@ class SiameseNetworkSimple(nn.Module):
     
 class SiameseNetworkComplex(nn.Module):
     def __init__(self):
-        super(SiameseNetwork, self).__init__()
+        super(SiameseNetworkComplex, self).__init__()
         self.cnn_layers = nn.Sequential(
             nn.Linear(21, 64),
             nn.ReLU(inplace=True),

@@ -1,18 +1,22 @@
 import numpy as np
-from old.path_reader import PropagationPath
 from sklearn.cluster import KMeans
 from sklearn.metrics import pairwise_distances_argmin_min
 
-
 class PatchGenerator:
-
     def __init__(self, num_patches=8, attribute="transmitter"):
         assert attribute in ["transmitter", "receiver", "gain", "hash"]
 
         self.num_patches = num_patches
         self.attribute = attribute
 
-    def generate_patches_index(self, paths):
+    def generate_patches(self, paths):
+        patches_index = self._generate_patches_index(paths)
+        patches = [[] for _ in range(self.num_patches)]
+        for i in range(len(patches_index)):
+            patches[patches_index[i]].append(paths[i])
+        return patches
+
+    def _generate_patches_index(self, paths):
         attribute_getter = {
             "transmitter": lambda path: path.points[0],
             "receiver": lambda path: path.points[-1],
@@ -61,11 +65,4 @@ class PatchGenerator:
                 points_to_reassign.remove(point_index)
 
         return labels
-
-    def generate_patches(self, paths):
-        patches_index = self.generate_patches_index(paths)
-        patches = [[] for _ in range(self.num_patches)]
-        for i in range(len(patches_index)):
-            patches[patches_index[i]].append(paths[i])
-        return patches
 

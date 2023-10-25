@@ -12,7 +12,23 @@ class PathDataLoader:
         self.offset = 0
         self.bytes = 0
 
-    def read_file(self, fileName: str):
+    # Returns a list with every propagation path
+    def read(self, fileName: str):
+        path_matrix = self._read_file(fileName)
+        path_list = []
+
+        for tx in path_matrix:
+            for rx in tx:
+                if len(rx) != 0:
+                    for path in rx:
+                        path_list.append(path)
+        return path_list
+    
+    # Returns the source format: a sparce matrix with tx as rows and rx as columns
+    def read_raw(self, fileName: str):
+        return self._read_file(fileName)
+
+    def _read_file(self, fileName: str):
         self.offset = 0
         self.bytes = np.fromfile(fileName, dtype=np.uint8)
 
