@@ -15,6 +15,34 @@ class PatchGenerator:
         for i in range(len(patches_index)):
             patches[patches_index[i]].append(paths[i])
         return patches
+    
+    def transform_patches(self, patches):
+        for i in range(len(patches)):
+            for j in range(len(patches[i])):
+                path = patches[i][j]
+                arr = []
+                c = 0
+                for l in range(len(path.points)):
+                    c += 1
+                    for m in range(len(path.points[l])):
+                        arr.append(path.points[l][m])
+                for l in range((5-c)*3, 0, -1):
+                    arr.append(0)
+                for l in range(len(path.interaction_types)):
+                    arr.append(path.interaction_types[l])
+                for l in range(5-c, 0, -1):
+                    arr.append(0)
+                arr.append(path.path_gain_db)
+                min_val = min(arr)
+                max_val = max(arr)
+
+                # Normalize the list to the range -1 to 1
+                normalized_data = [2 * (x - min_val) / (max_val - min_val) - 1 for x in arr]
+
+                # Update list
+                patches[i][j] = normalized_data
+                
+        return patches
 
     def _generate_patches_index(self, paths):
         attribute_getter = {
