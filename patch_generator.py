@@ -1,18 +1,44 @@
 import numpy as np
-from old.path_reader import PropagationPath
 from sklearn.cluster import KMeans
 from sklearn.metrics import pairwise_distances_argmin_min
 
-
 class PatchGenerator:
-
     def __init__(self, num_patches=8, attribute="transmitter"):
         assert attribute in ["transmitter", "receiver", "gain", "hash"]
 
         self.num_patches = num_patches
         self.attribute = attribute
 
-    def generate_patches_index(self, paths):
+    def generate_patches(self, paths):
+        patches_index = self._generate_patches_index(paths)
+        patches = [[] for _ in range(self.num_patches)]
+        for i in range(len(patches_index)):
+            patches[patches_index[i]].append(paths[i])
+        return patches
+    
+    def transform_patches(self, patches):
+        for i in range(len(patches)):
+            for j in range(len(patches[i])):
+                path = patches[i][j]
+                arr = []
+                c = 0
+                for l in range(len(path.points)):
+                    c += 1
+                    for m in range(len(path.points[l])):
+                        arr.append(path.points[l][m])
+                for l in range((5-c)*3, 0, -1):
+                    arr.append(0)
+                for l in range(len(path.interaction_types)):
+                    arr.append(path.interaction_types[l])
+                for l in range(5-c, 0, -1):
+                    arr.append(0)
+                arr.append(path.path_gain_db)
+   
+                patches[i][j] = arr
+                
+        return patches
+
+    def _generate_patches_index(self, paths):
         attribute_getter = {
             "transmitter": lambda path: path.points[0],
             "receiver": lambda path: path.points[-1],
@@ -61,11 +87,4 @@ class PatchGenerator:
                 points_to_reassign.remove(point_index)
 
         return labels
-
-    def generate_patches(self, paths):
-        patches_index = self.generate_patches_index(paths)
-        patches = [[] for _ in range(self.num_patches)]
-        for i in range(len(patches_index)):
-            patches[patches_index[i]].append(paths[i])
-        return patches
 
