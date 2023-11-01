@@ -88,3 +88,26 @@ class PatchGenerator:
 
         return labels
 
+
+def normalize_patches(patches):
+    num_paths_in_patches = []
+    for i in patches:
+        num_paths_in_patches.append(len(i))
+
+    # Flatten the list -> Normalize every element
+    flattened_patches = [value for patch in patches for path in patch for value in path]
+    data_min = min(flattened_patches)
+    data_max = max(flattened_patches)
+    normalized_patches = [2 * ((x - data_min) / (data_max - data_min)) - 1 for x in flattened_patches]
+
+    # Re-create the 3D list
+    patches = [[] for i in range(len(num_paths_in_patches))]
+    c = 0
+    for i in range(len(num_paths_in_patches)):
+        for j in range(num_paths_in_patches[i]):
+            patches[i].append([])
+            for k in range(21):
+                patches[i][j].append(normalized_patches[c])
+                c += 1
+
+    return patches
