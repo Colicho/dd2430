@@ -15,9 +15,9 @@ class SiameseNetworkSimple(nn.Module):
         output = self.fc(x)
         return output
 
-class SiameseCNNN(nn.Module):
+class SiameseCNN(nn.Module):
     def __init__(self):
-        super(SiameseCNNN, self).__init__()
+        super(SiameseCNN, self).__init__()
         self.convolutional = nn.Sequential(
             nn.Conv1d(in_channels=1, out_channels=32, kernel_size=3),
             nn.BatchNorm1d(32),
